@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "freshman.h"
 #define DIM 1024
+#define FULL_MASK 0xffffffff
 
 int recursiveReduce(int *data, int const size)
 {
@@ -141,11 +142,11 @@ __global__ void reduceSmem(int * g_idata,int * g_odata,unsigned int n)
 }
 __inline__ __device__ int warpReduce(int localSum)
 {
-    localSum += __shfl_xor(localSum, 16);
-    localSum += __shfl_xor(localSum, 8);
-    localSum += __shfl_xor(localSum, 4);
-    localSum += __shfl_xor(localSum, 2);
-    localSum += __shfl_xor(localSum, 1);
+    localSum += __shfl_xor_sync(FULL_MASK, localSum, 16);
+    localSum += __shfl_xor_sync(FULL_MASK, localSum, 8);
+    localSum += __shfl_xor_sync(FULL_MASK, localSum, 4);
+    localSum += __shfl_xor_sync(FULL_MASK, localSum, 2);
+    localSum += __shfl_xor_sync(FULL_MASK, localSum, 1);
 
     return localSum;
 }
@@ -165,7 +166,7 @@ __global__ void reduceShfl(int * g_idata,int * g_odata,unsigned int n)
 	if(laneIdx==0)
 		smem[warpIdx]=mySum;
 	__syncthreads();
-	mySum=(threadIdx.x<DIM)?smem[laneIdx]:0;
+	mySum=(threadIdx.x < blockDim.x / warpSize) ? smem[laneIdx] : 0;
 	if(warpIdx==0)
 		mySum=warpReduce(mySum);
 	if(threadIdx.x==0)

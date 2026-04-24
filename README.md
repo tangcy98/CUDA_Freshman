@@ -1,4 +1,10 @@
 
+## 中文课程大纲
+
+本项目已补充中文学习路径、逐章授课指导和 Agent 互动授课指南，见 [COURSE_OUTLINE_CN.md](./COURSE_OUTLINE_CN.md)。
+
+课程进度、互动日志和章节复盘的持久化记录放在 [course_records](./course_records/)。
+
 ## 联系我
 ![](./IMG_9066.JPG)
 ## 博客

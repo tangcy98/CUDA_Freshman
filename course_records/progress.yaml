@@ -1,0 +1,157 @@
+version: 1
+course:
+  title: CUDA Freshman
+  outline: COURSE_OUTLINE_CN.md
+  record_policy: course_records/README.md
+current:
+  chapter_id: 00_environment
+  chapter_title: 课前准备与环境验证
+  status: not_started
+  mastery_level: 0
+  active_question: null
+  blocker: null
+  next_action: 运行 nvidia-smi、nvcc --version，并确认 CMake 构建方式
+chapters:
+  - id: 00_environment
+    title: 课前准备与环境验证
+    paths:
+      - CMakeLists.txt
+      - include/freshman.h
+    blogs:
+      - https://face2ai.com/CUDA-F-0-0-Tencent-GPU-Cloud/
+    status: not_started
+    mastery_level: 0
+    last_session: null
+  - id: 01_hello_world
+    title: CUDA Hello World
+    paths:
+      - 0_hello_world/hello_world.cu
+    blogs:
+      - https://face2ai.com/CUDA-F-1-1-%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97-CUDA/
+    status: not_started
+    mastery_level: 0
+    last_session: null
+  - id: 02_thread_model
+    title: Grid、Block 与线程索引
+    paths:
+      - 1_check_dimension/check_dimension.cu
+      - 2_grid_block/grid_block.cu
+      - 5_thread_index/thread_index.cu
+    blogs:
+      - https://face2ai.com/CUDA-F-2-0-CUDA%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B01/
+      - https://face2ai.com/CUDA-F-2-3-%E7%BB%84%E7%BB%87%E5%B9%B6%E8%A1%8C%E7%BA%BF%E7%A8%8B/
+    status: not_started
+    mastery_level: 0
+    last_session: null
+  - id: 03_vector_add
+    title: 向量加法、内存拷贝与计时
+    paths:
+      - 3_sum_arrays/sum_arrays.cu
+      - 4_sum_arrays_timer/sum_arrays_timer.cu
+    blogs:
+      - https://face2ai.com/CUDA-F-2-1-CUDA%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B02/
+      - https://face2ai.com/CUDA-F-2-2-%E6%A0%B8%E5%87%BD%E6%95%B0%E8%AE%A1%E6%97%B6/
+    status: not_started
+    mastery_level: 0
+    last_session: null
+  - id: 04_matrix_and_device
+    title: 矩阵计算与设备信息
+    paths:
+      - 6_sum_matrix/sum_matrix.cu
+      - 7_device_information/device_information.cu
+      - 9_sum_matrix2D/sum_matrix2D.cu
+      - 11_simple_sum_matrix2D/simple_sum_matrix.cu
+    blogs:
+      - https://face2ai.com/CUDA-F-2-4-%E8%AE%BE%E5%A4%87%E4%BF%A1%E6%81%AF/
+      - https://face2ai.com/CUDA-F-3-3-%E5%B9%B6%E8%A1%8C%E6%80%A7%E8%A1%A8%E7%8E%B0/
+    status: not_started
+    mastery_level: 0
+    last_session: null
+  - id: 05_execution_model
+    title: 执行模型、分支分化与归约
+    paths:
+      - 8_divergence/divergence.cu
+      - 10_reduceInteger/reduceInteger.cu
+      - 12_reduce_unrolling/reduceUnrolling.cu
+      - 13_nested_hello_world/nested_Hello_World.cu
+    blogs:
+      - https://face2ai.com/CUDA-F-3-1-CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/
+      - https://face2ai.com/CUDA-F-3-2-%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8-P1/
+      - https://face2ai.com/CUDA-F-3-2-%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8-P2/
+      - https://face2ai.com/CUDA-F-3-4-%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/
+      - https://face2ai.com/CUDA-F-3-5-%E5%B1%95%E5%BC%80%E5%BE%AA%E7%8E%AF/
+      - https://face2ai.com/CUDA-F-3-6-%E5%8A%A8%E6%80%81%E5%B9%B6%E8%A1%8C/
+    status: not_started
+    mastery_level: 0
+    last_session: null
+  - id: 06_global_memory
+    title: 全局内存、内存管理与访问模式
+    paths:
+      - 14_global_variable/global_variable.cu
+      - 15_pine_memory/pine_memory.cu
+      - 16_zero_copy_memory/zero_copy_memory.cu
+      - 17_UVA/UVA.cu
+      - 18_sum_array_offset/sum_array_offset.cu
+      - 19_AoS/AoS.cu
+      - 20_SoA/SoA.cu
+      - 21_sum_array_offset_unrolling/sum_array_offset_unrolling.cu
+      - 22_transform_matrix2D/transform_matrix2D.cu
+      - 23_sum_array_uniform_memory/sum_arrays_uniform_memory.cu
+    blogs:
+      - https://face2ai.com/CUDA-F-4-0-%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98/
+      - https://face2ai.com/CUDA-F-4-1-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/
+      - https://face2ai.com/CUDA-F-4-2-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/
+      - https://face2ai.com/CUDA-F-4-3-%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%E6%A8%A1%E5%BC%8F/
+      - https://face2ai.com/CUDA-F-4-4-%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/
+      - https://face2ai.com/CUDA-F-4-5-%E4%BD%BF%E7%94%A8%E7%BB%9F%E4%B8%80%E5%86%85%E5%AD%98%E7%9A%84%E5%90%91%E9%87%8F%E5%8A%A0%E6%B3%95/
+    status: not_started
+    mastery_level: 0
+    last_session: null
+  - id: 07_shared_constant_shuffle
+    title: 共享内存、常量内存与 Shuffle
+    paths:
+      - 24_shared_memory_read_data/shared_memory_read_data.cu
+      - 25_reduce_integer_shared_memory/reduce_integer_shared_memory.cu
+      - 26_transform_shared_memory/transform_shared_memory.cu
+      - 27_stencil_1d_constant_read_only/stencil_1d_constant_read_only.cu
+      - 28_shfl_test/shfl_test.cu
+      - 29_reduce_shfl/reduce_shfl.cu
+    blogs:
+      - https://face2ai.com/CUDA-F-5-0-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%92%8C%E5%B8%B8%E9%87%8F%E5%86%85%E5%AD%98/
+      - https://face2ai.com/CUDA-F-5-1-CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/
+      - https://face2ai.com/CUDA-F-5-2-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E7%9A%84%E6%95%B0%E6%8D%AE%E5%B8%83%E5%B1%80/
+      - https://face2ai.com/CUDA-F-5-3-%E5%87%8F%E5%B0%91%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/
+      - https://face2ai.com/CUDA-F-5-4-%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/
+      - https://face2ai.com/CUDA-F-5-5-%E5%B8%B8%E9%87%8F%E5%86%85%E5%AD%98/
+      - https://face2ai.com/CUDA-F-5-6-%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%B4%97%E7%89%8C%E6%8C%87%E4%BB%A4/
+    status: not_started
+    mastery_level: 0
+    last_session: null
+  - id: 08_streams_concurrency
+    title: Stream、事件、并发与异步流水
+    paths:
+      - 30_stream/stream.cu
+      - 31_stream_omp/stream_omp.cu
+      - 32_stream_resource/stream_resource.cu
+      - 33_stream_block/stream_block.cu
+      - 34_stream_dependence/stream_dependence.cu
+      - 35_multi_add_depth/multi_add_depth.cu
+      - 36_multi_add_breadth/multi_add_breadth.cu
+      - 37_asyncAPI/asyncAPI.cu
+      - 38_stream_call_back/stream_call_back.cu
+    blogs:
+      - https://face2ai.com/CUDA-F-6-0-%E6%B5%81%E5%92%8C%E5%B9%B6%E5%8F%91/
+      - https://face2ai.com/CUDA-F-6-1-%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6%E6%A6%82%E8%BF%B0/
+      - https://face2ai.com/CUDA-F-6-2-%E5%B9%B6%E5%8F%91%E5%86%85%E6%A0%B8%E6%89%A7%E8%A1%8C/
+      - https://face2ai.com/CUDA-F-6-3-%E9%87%8D%E5%8F%A0%E5%86%85%E6%A0%B8%E6%89%A7%E8%A1%8C%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/
+      - https://face2ai.com/CUDA-F-6-4-%E9%87%8D%E5%8F%A0GPU%E5%92%8CCPU%E7%9A%84%E6%89%A7%E8%A1%8C/
+      - https://face2ai.com/CUDA-F-6-5-%E6%B5%81%E5%9B%9E%E8%B0%83/
+    status: not_started
+    mastery_level: 0
+    last_session: null
+recent_sessions: []
+open_questions: []
+decisions:
+  - date: null
+    decision: 先从单 GPU device 0 开始，完成 stream 章节后再扩展多 GPU 讨论
+last_updated: null

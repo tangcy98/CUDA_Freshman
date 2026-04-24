@@ -54,7 +54,7 @@ int main(int argc,char **argv)
   printf("Execution configuration<<<%d,%d>>> Time elapsed %f sec\n",grid.x,block.x,iElaps);
 
   //CHECK(cudaMemcpy(res_from_gpu_h,res_d,nByte,cudaMemcpyDeviceToHost));
-  sumArrays(b_d,b_d,res_h,nElem);
+  sumArrays(a_d,b_d,res_h,nElem);
 
   checkResult(res_h,res_d,nElem);
   cudaFree(a_d);

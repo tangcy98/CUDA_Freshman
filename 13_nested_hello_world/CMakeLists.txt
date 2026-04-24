@@ -1,0 +1,3 @@
+add_executable(nested_Hello_World nested_Hello_World.cu)
+set_target_properties(nested_Hello_World PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+target_link_libraries(nested_Hello_World PRIVATE cudadevrt)

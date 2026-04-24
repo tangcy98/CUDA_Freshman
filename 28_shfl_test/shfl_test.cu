@@ -3,10 +3,11 @@
 #include "freshman.h"
 #define BDIM 16
 #define SEGM 4
+#define FULL_MASK 0xffffffff
 __global__ void test_shfl_broadcast(int *in,int*out,int const srcLans)
 {
     int value=in[threadIdx.x];
-    value=__shfl(value,srcLans,BDIM);
+    value=__shfl_sync(FULL_MASK,value,srcLans,BDIM);
     out[threadIdx.x]=value;
 
 }
@@ -14,7 +15,7 @@ __global__ void test_shfl_broadcast(int *in,int*out,int const srcLans)
 __global__ void test_shfl_up(int *in,int*out,int const delta)
 {
     int value=in[threadIdx.x];
-    value=__shfl_up(value,delta,BDIM);
+    value=__shfl_up_sync(FULL_MASK,value,delta,BDIM);
     out[threadIdx.x]=value;
 
 }
@@ -22,7 +23,7 @@ __global__ void test_shfl_up(int *in,int*out,int const delta)
 __global__ void test_shfl_down(int *in,int*out,int const delta)
 {
     int value=in[threadIdx.x];
-    value=__shfl_down(value,delta,BDIM);
+    value=__shfl_down_sync(FULL_MASK,value,delta,BDIM);
     out[threadIdx.x]=value;
 
 }
@@ -30,7 +31,7 @@ __global__ void test_shfl_down(int *in,int*out,int const delta)
 __global__ void test_shfl_wrap(int *in,int*out,int const offset)
 {
     int value=in[threadIdx.x];
-    value=__shfl(value,threadIdx.x+offset,BDIM);
+    value=__shfl_sync(FULL_MASK,value,threadIdx.x+offset,BDIM);
     out[threadIdx.x]=value;
 
 }
@@ -38,7 +39,7 @@ __global__ void test_shfl_wrap(int *in,int*out,int const offset)
 __global__ void test_shfl_xor(int *in,int*out,int const mask)
 {
     int value=in[threadIdx.x];
-    value=__shfl_xor(value,mask,BDIM);
+    value=__shfl_xor_sync(FULL_MASK,value,mask,BDIM);
     out[threadIdx.x]=value;
 
 }
@@ -49,10 +50,10 @@ __global__ void test_shfl_xor_array(int *in,int*out,int const mask)
     int value[SEGM];
     for(int i=0;i<SEGM;i++)
         value[i]=in[idx+i];
-    value[0]=__shfl_xor(value[0],mask,BDIM);
-    value[1]=__shfl_xor(value[1],mask,BDIM);
-    value[2]=__shfl_xor(value[2],mask,BDIM);
-    value[3]=__shfl_xor(value[3],mask,BDIM);
+    value[0]=__shfl_xor_sync(FULL_MASK,value[0],mask,BDIM);
+    value[1]=__shfl_xor_sync(FULL_MASK,value[1],mask,BDIM);
+    value[2]=__shfl_xor_sync(FULL_MASK,value[2],mask,BDIM);
+    value[3]=__shfl_xor_sync(FULL_MASK,value[3],mask,BDIM);
     for(int i=0;i<SEGM;i++)
         out[idx+i]=value[i];
 
@@ -68,7 +69,7 @@ void swap(int *value,int laneIdx,int mask,int firstIdx,int secondIdx)
         value[secondIdx]=tmp;
 
     }
-    value[secondIdx]=__shfl_xor(value[secondIdx],mask,BDIM);
+    value[secondIdx]=__shfl_xor_sync(FULL_MASK,value[secondIdx],mask,BDIM);
     if(pred)
     {
         int tmp=value[firstIdx];

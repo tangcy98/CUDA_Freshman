@@ -43,8 +43,8 @@ int main(int argc,char **argv)
     CHECK(cudaHostAlloc((float**)&res_h,nByte,cudaHostAllocDefault));
     CHECK(cudaHostAlloc((float**)&res_from_gpu_h,nByte,cudaHostAllocDefault));
 
-    cudaMemset(res_h,0,nByte);
-    cudaMemset(res_from_gpu_h,0,nByte);
+    memset(res_h,0,nByte);
+    memset(res_from_gpu_h,0,nByte);
 
     float *a_d,*b_d,*res_d;
     CHECK(cudaMalloc((float**)&a_d,nByte));
@@ -56,14 +56,16 @@ int main(int argc,char **argv)
 
     sumArrays(a_h,b_h,res_h,nElem);
     dim3 block(512);
-    dim3 grid((nElem-1)/block.x+1);
+    int iElem=nElem/N_SEGMENT;
+    dim3 grid((iElem-1)/block.x+1);
 
 
     //asynchronous calculation
-    int iElem=nElem/N_SEGMENT;
     cudaStream_t stream[N_SEGMENT];
+    int stream_id[N_SEGMENT];
     for(int i=0;i<N_SEGMENT;i++)
     {
+        stream_id[i]=i;
         CHECK(cudaStreamCreate(&stream[i]));
     }
     cudaEvent_t start,stop;
@@ -77,7 +79,7 @@ int main(int argc,char **argv)
         CHECK(cudaMemcpyAsync(&b_d[ioffset],&b_h[ioffset],nByte/N_SEGMENT,cudaMemcpyHostToDevice,stream[i]));
         sumArraysGPU<<<grid,block,0,stream[i]>>>(&a_d[ioffset],&b_d[ioffset],&res_d[ioffset],iElem);
         CHECK(cudaMemcpyAsync(&res_from_gpu_h[ioffset],&res_d[ioffset],nByte/N_SEGMENT,cudaMemcpyDeviceToHost,stream[i]));
-        CHECK(cudaStreamAddCallback(stream[i],my_callback,(void *)(stream+i),0));
+        CHECK(cudaStreamAddCallback(stream[i],my_callback,(void *)&stream_id[i],0));
     }
     //timer
     CHECK(cudaEventRecord(stop, 0));
@@ -96,10 +98,10 @@ int main(int argc,char **argv)
     }
     cudaFree(a_d);
     cudaFree(b_d);
-    cudaFree(a_h);
-    cudaFree(b_h);
-    cudaFree(res_h);
-    cudaFree(res_from_gpu_h);
+    cudaFreeHost(a_h);
+    cudaFreeHost(b_h);
+    cudaFreeHost(res_h);
+    cudaFreeHost(res_from_gpu_h);
     cudaEventDestroy(start);
     cudaEventDestroy(stop);
 

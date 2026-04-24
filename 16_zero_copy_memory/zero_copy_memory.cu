@@ -13,10 +13,11 @@ void sumArrays(float * a,float * b,float * res,const int size)
     res[i+3]=a[i+3]+b[i+3];
   }
 }
-__global__ void sumArraysGPU(float*a,float*b,float*res)
+__global__ void sumArraysGPU(float*a,float*b,float*res,int N)
 {
   int i=blockIdx.x*blockDim.x+threadIdx.x;
-  res[i]=a[i]+b[i];
+  if(i < N)
+    res[i]=a[i]+b[i];
 }
 int main(int argc,char **argv)
 {
@@ -36,8 +37,7 @@ int main(int argc,char **argv)
   float *a_host,*b_host,*res_d;
   double iStart,iElaps;
   dim3 block(1024);
-  dim3 grid(nElem/block.x);
-  res_from_gpu_h=(float*)malloc(nByte);
+  dim3 grid((nElem-1)/block.x+1);
   float *a_dev,*b_dev;
   CHECK(cudaHostAlloc((float**)&a_host,nByte,cudaHostAllocMapped));
   CHECK(cudaHostAlloc((float**)&b_host,nByte,cudaHostAllocMapped));
@@ -49,7 +49,7 @@ int main(int argc,char **argv)
   iStart = cpuSecond();
   CHECK(cudaHostGetDevicePointer((void**)&a_dev,(void*) a_host,0));
   CHECK(cudaHostGetDevicePointer((void**)&b_dev,(void*) b_host,0));
-  sumArraysGPU<<<grid,block>>>(a_dev,b_dev,res_d);
+  sumArraysGPU<<<grid,block>>>(a_dev,b_dev,res_d,nElem);
   CHECK(cudaMemcpy(res_from_gpu_h,res_d,nByte,cudaMemcpyDeviceToHost));
   iElaps = cpuSecond() - iStart;
  //=============================================================//
@@ -74,8 +74,8 @@ int main(int argc,char **argv)
   iStart = cpuSecond();
   CHECK(cudaMemcpy(a_d_n,a_h_n,nByte,cudaMemcpyHostToDevice));
   CHECK(cudaMemcpy(b_d_n,b_h_n,nByte,cudaMemcpyHostToDevice));
-  sumArraysGPU<<<grid,block>>>(a_d_n,b_d_n,res_d_n);
-  CHECK(cudaMemcpy(res_from_gpu_h,res_d,nByte,cudaMemcpyDeviceToHost));
+  sumArraysGPU<<<grid,block>>>(a_d_n,b_d_n,res_d_n,nElem);
+  CHECK(cudaMemcpy(res_from_gpu_h_n,res_d_n,nByte,cudaMemcpyDeviceToHost));
   iElaps = cpuSecond() - iStart;
 //=============================================================//
   printf("device memory elapsed %lf ms \n", iElaps);
@@ -84,6 +84,8 @@ int main(int argc,char **argv)
 
   sumArrays(a_host,b_host,res_h,nElem);
   checkResult(res_h,res_from_gpu_h,nElem);
+  sumArrays(a_h_n,b_h_n,res_h_n,nElem);
+  checkResult(res_h_n,res_from_gpu_h_n,nElem);
 
   cudaFreeHost(a_host);
   cudaFreeHost(b_host);

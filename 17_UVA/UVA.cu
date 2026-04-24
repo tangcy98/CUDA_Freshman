@@ -35,7 +35,6 @@ int main(int argc,char **argv)
   CHECK(cudaHostAlloc((float**)&a_host,nByte,cudaHostAllocMapped));
   CHECK(cudaHostAlloc((float**)&b_host,nByte,cudaHostAllocMapped));
   CHECK(cudaMalloc((float**)&res_d,nByte));
-  res_from_gpu_h=(float*)malloc(nByte);
 
   initialData(a_host,nElem);
   initialData(b_host,nElem);

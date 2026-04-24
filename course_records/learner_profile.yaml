@@ -1,0 +1,29 @@
+version: 1
+learner:
+  name: null
+  goals:
+    - 系统学习 CUDA Freshman 项目
+    - 能逐章运行、理解并解释 CUDA 基础实验
+    - 在 8 卡 GPU 机器上掌握实验、观察和调优方法
+  background:
+    cuda: unknown
+    c_cpp: unknown
+    linux_shell: unknown
+    profiling_tools: unknown
+  preferences:
+    language: zh-CN
+    pace: chapter_by_chapter
+    interaction_style: interactive_multi_turn
+environment:
+  local_workspace: /Users/tangchenyu/CUDA_Freshman
+  gpu_machine:
+    gpu_count: 8
+    gpu_model: unknown
+    cuda_driver: unknown
+    cuda_toolkit: unknown
+    cmake: unknown
+  default_device_policy: start_with_single_gpu_device_0
+constraints:
+  verify_on_gpu_machine: true
+  avoid_multi_gpu_before_stream_chapters: true
+last_updated: null
