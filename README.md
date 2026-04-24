@@ -5,6 +5,27 @@
 
 课程进度、互动日志和章节复盘的持久化记录放在 [course_records](./course_records/)。
 
+## 现代 CUDA 架构支持
+
+本仓库现在只面向 Ampere / Ada / Hopper 教学环境，默认构建 `sm_80`、`sm_86`、`sm_87`、`sm_89`、`sm_90`。旧架构（如 `sm_35`、`sm_60`、`sm_70`、`sm_75`）不再作为编译或运行目标。
+
+```bash
+cmake -S . -B build -DCMAKE_CUDA_ARCHITECTURES="80;86;87;89;90"
+cmake --build build -j
+```
+
+如果旧 `build` 目录缓存了 `60/70/75` 等架构，请重新运行上面的配置命令，或清理后再配置。
+
+如果只需要一个单架构示例，统一使用：
+
+```bash
+cmake -S . -B build -DCMAKE_CUDA_ARCHITECTURES=90
+```
+
+常见设备对应关系：A100 为 `80`，RTX 3090 为 `86`，Jetson AGX Orin 为 `87`，L4/L40/RTX 4090 为 `89`，H100/H200 为 `90`。
+
+第 38 章 stream 完成通知示例已使用 `cudaLaunchHostFunc`，不再使用旧的 `cudaStreamAddCallback`。
+
 ## 联系我
 ![](./IMG_9066.JPG)
 ## 博客

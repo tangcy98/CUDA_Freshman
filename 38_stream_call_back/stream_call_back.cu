@@ -3,9 +3,9 @@
 #include "freshman.h"
 #define N_REPEAT 10
 #define N_SEGMENT 16
-void CUDART_CB my_callback(cudaStream_t stream,cudaError_t status,void * data)
+void CUDART_CB my_callback(void * data)
 {
-    printf("call back from stream:%d\n",*((int *)data));
+    printf("host function from stream:%d\n",*((int *)data));
 }
 void sumArrays(float * a,float * b,float * res,const int size)
 {
@@ -79,7 +79,7 @@ int main(int argc,char **argv)
         CHECK(cudaMemcpyAsync(&b_d[ioffset],&b_h[ioffset],nByte/N_SEGMENT,cudaMemcpyHostToDevice,stream[i]));
         sumArraysGPU<<<grid,block,0,stream[i]>>>(&a_d[ioffset],&b_d[ioffset],&res_d[ioffset],iElem);
         CHECK(cudaMemcpyAsync(&res_from_gpu_h[ioffset],&res_d[ioffset],nByte/N_SEGMENT,cudaMemcpyDeviceToHost,stream[i]));
-        CHECK(cudaStreamAddCallback(stream[i],my_callback,(void *)&stream_id[i],0));
+        CHECK(cudaLaunchHostFunc(stream[i],my_callback,(void *)&stream_id[i]));
     }
     //timer
     CHECK(cudaEventRecord(stop, 0));

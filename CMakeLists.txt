@@ -1,12 +1,25 @@
 cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
-project(CUDA_Freshman LANGUAGES CXX C CUDA)
-
-set(CMAKE_CUDA_STANDARD 11)
-set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 
 if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-  set(CMAKE_CUDA_ARCHITECTURES 60 70 75 80 86)
+  set(CMAKE_CUDA_ARCHITECTURES 80 86 87 89 90)
 endif()
+
+project(CUDA_Freshman LANGUAGES CXX C CUDA)
+
+set(CMAKE_CUDA_STANDARD 14)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
+set(CUDA_FRESHMAN_SUPPORTED_ARCHITECTURES 80 86 87 89 90)
+foreach(arch IN LISTS CMAKE_CUDA_ARCHITECTURES)
+  if(NOT arch IN_LIST CUDA_FRESHMAN_SUPPORTED_ARCHITECTURES)
+    message(FATAL_ERROR
+      "Unsupported CUDA architecture '${arch}'. "
+      "This repository now targets only sm_80, sm_86, sm_87, sm_89, and sm_90. "
+      "Configure with -DCMAKE_CUDA_ARCHITECTURES=\"80;86;87;89;90\", or use 90 for a single-architecture build.")
+  endif()
+endforeach()
+
+message(STATUS "CUDA_Freshman target architectures: ${CMAKE_CUDA_ARCHITECTURES}")
 
 include_directories(./include)
 add_subdirectory(0_hello_world)

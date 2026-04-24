@@ -94,11 +94,11 @@ nvcc -I include 3_sum_arrays/sum_arrays.cu -o /tmp/sum_arrays
 /tmp/sum_arrays
 
 # 动态并行章节需要额外参数
-nvcc -arch=sm_70 -I include 13_nested_hello_world/nested_Hello_World.cu \
+nvcc -arch=sm_90 -I include 13_nested_hello_world/nested_Hello_World.cu \
      -o /tmp/nested -lcudadevrt --relocatable-device-code true
 ```
 
-GPU 架构选择：A100 = `80`，L40/L4/RTX 4090 = `89`，H100/H200 = `90`，RTX 3090 = `86`。编译失败提示架构不支持时，根据 `nvidia-smi` 结果设置 `CMAKE_CUDA_ARCHITECTURES`，不使用旧的 `sm_35`。
+GPU 架构范围选择：A100 = `80`，RTX 3090 = `86`，Jetson AGX Orin = `87`，L40/L4/RTX 4090 = `89`，H100/H200 = `90`。本仓库只支持 `sm_80`、`sm_86`、`sm_87`、`sm_89`、`sm_90`；如果命令或文档只指定一代架构，统一指定 `sm_90` / `90`。
 
 ## 代码规范
 
@@ -159,7 +159,7 @@ cudaDeviceSynchronize();
 | 结果不匹配 | kernel 是否越界、grid 是否覆盖全量数据、是否漏了同步、是否拷贝了正确的 device buffer |
 | 计时不稳定 | 固定 GPU、预热一次、增大数据规模或重复次数，区分 CPU wall time 与 CUDA event time |
 | 多 stream 没变快 | 检查 pinned memory 是否使用、kernel 资源占用、拷贝方向、设备是否支持 concurrent copy/execute |
-| 编译失败（架构） | 根据 `nvidia-smi` 设置 `CMAKE_CUDA_ARCHITECTURES`，不使用旧架构号 |
+| 编译失败（架构） | 根据 `nvidia-smi` 设置为 `80/86/87/89/90` 之一，不使用旧架构号 |
 
 纠错时先肯定用户可用的理解部分，再指出边界，并把结论落到本章代码的具体行号。
 

@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 # 完整构建（从仓库根目录）
 mkdir -p build && cd build
-cmake .. -DCMAKE_CUDA_ARCHITECTURES="60;70;75;80;86"
+cmake .. -DCMAKE_CUDA_ARCHITECTURES="80;86;87;89;90"
 make -j$(nproc)
 
 # 只编译单个示例（快速迭代）
@@ -21,7 +21,7 @@ cmake --build build --target hello_world
 cmake --build build --target reduceInteger
 
 # 单独指定目标架构（加快编译）
-cmake .. -DCMAKE_CUDA_ARCHITECTURES=86   # RTX 3090 / 4090 = 86/89，A100 = 80，H100 = 90
+cmake .. -DCMAKE_CUDA_ARCHITECTURES=90   # 单架构示例统一用 90；范围构建用 80;86;87;89;90
 ```
 
 快速运行单个章节（无需 CMake）：
@@ -31,9 +31,11 @@ nvcc -I include 3_sum_arrays/sum_arrays.cu -o /tmp/sum_arrays && /tmp/sum_arrays
 
 动态并行章节需额外参数：
 ```bash
-nvcc -arch=sm_70 -I include 13_nested_hello_world/nested_Hello_World.cu \
+nvcc -arch=sm_90 -I include 13_nested_hello_world/nested_Hello_World.cu \
      -o /tmp/nested -lcudadevrt --relocatable-device-code true
 ```
+
+本仓库只支持 `sm_80`、`sm_86`、`sm_87`、`sm_89`、`sm_90`，根 `CMakeLists.txt` 会拒绝旧架构。范围构建写全 `80;86;87;89;90`；单架构示例统一写 `90` / `sm_90`。
 
 ## 仓库结构
 
@@ -48,13 +50,13 @@ nvcc -arch=sm_70 -I include 13_nested_hello_world/nested_Hello_World.cu \
 | 18–23 | 访问模式、AoS/SoA、统一内存 | 内存对齐、合并访问、`cudaMallocManaged` |
 | 24–27 | 共享内存、常量内存、只读缓存 | `__shared__`、bank conflict、广播 |
 | 28–29 | Warp Shuffle | `__shfl*_sync`、寄存器间直接通信 |
-| 30–38 | CUDA Streams、异步 API、回调 | 多流并发、H2D-kernel-D2H 流水线、callback |
+| 30–38 | CUDA Streams、异步 API、host function | 多流并发、H2D-kernel-D2H 流水线、`cudaLaunchHostFunc` |
 
 所有示例共用 `include/freshman.h`，提供：`CHECK()`（CUDA API 错误检查）、`cpuSecond()`（CPU 计时）、`initialData()`、`checkResult()`、`initDevice()`、`printMatrix()`。
 
 ## 特殊构建情况
 
-- **`13_nested_hello_world`**：CMakeLists 已启用 `CUDA_SEPARABLE_COMPILATION ON` 并链接 `cudadevrt`，编译时需 compute capability ≥ 3.5。
+- **`13_nested_hello_world`**：CMakeLists 已启用 `CUDA_SEPARABLE_COMPILATION ON` 并链接 `cudadevrt`，本仓库只面向 compute capability 8.0–9.0。
 - **`31_stream_omp`**：依赖 OpenMP，未安装时 CMake 会静默跳过该 target。
 
 ## 新增示例的步骤
